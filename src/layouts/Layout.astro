@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Footer from '../components/Footer.astro'
+import Navbar from '../components/Navbar.astro'
 import Analytics from '@vercel/analytics/astro'
 
 const { title } = Astro.props;
@@ -16,6 +17,8 @@ const { title } = Astro.props;
 		<title>{title}</title>
 	</head>
 	<body class="max-w-6xl mx-auto px-6 py-12 antialiased">
+		<Navbar />
+
 		<slot />
 
 		<div class="h-12"></div> <Footer /> </body>

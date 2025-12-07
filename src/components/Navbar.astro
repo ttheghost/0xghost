@@ -1,0 +1,28 @@
+---
+const pathname = Astro.url.pathname;
+const currentPath = pathname === "/" ? "~" : "~" + pathname.replace(/\/$/, "");
+---
+
+<nav class="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 border-b border-zinc-800 bg-zinc-950/90 supports-backdrop-blur:bg-zinc-950/60">
+  <div class="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between font-mono text-sm">
+    
+    <div class="flex items-center gap-2">
+      <span class="text-green-400 font-bold">➜</span>
+      <span class="text-blue-400">0xGhost</span>
+      <span class="text-zinc-600">in</span>
+      <span class="text-yellow-400">{currentPath}</span>
+    </div>
+
+    <div class="flex gap-6 text-zinc-400">
+      <a href="/" class={`hover:text-zinc-100 transition-colors ${pathname === '/' ? 'text-white font-bold' : ''}`}>
+        /home
+      </a>
+      <a href="/projects" class={`hover:text-zinc-100 transition-colors ${pathname.startsWith('/projects') ? 'text-white font-bold' : ''}`}>
+        /bin
+      </a>
+      <a href="/blog" class={`hover:text-zinc-100 transition-colors ${pathname.startsWith('/blog') ? 'text-white font-bold' : ''}`}>
+        /logs
+      </a>
+    </div>
+  </div>
+</nav>
