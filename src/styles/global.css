@@ -1,4 +1,28 @@
 @import "tailwindcss";
+@import "@fontsource/jetbrains-mono";
+
+:root {
+  --bg-color: #09090b; 
+}
+
+body {
+  background-color: var(--bg-color);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #09090b; 
+}
+::-webkit-scrollbar-thumb {
+  background: #27272a; 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46; 
+}
 
 @layer components {
   .prose pre {
