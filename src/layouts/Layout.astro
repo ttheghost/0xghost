@@ -1,5 +1,8 @@
 ---
 import '../styles/global.css';
+import Footer from '../components/Footer.astro'
+import Analytics from '@vercel/analytics/astro'
+
 const { title } = Astro.props;
 ---
 
@@ -15,10 +18,14 @@ const { title } = Astro.props;
 	<body class="max-w-3xl mx-auto px-6 py-12 antialiased">
 		<slot />
 
+		<div class="h-12"></div> <Footer /> </body>
 		<script>
 			const blocks = document.querySelectorAll('pre');
 
 			blocks.forEach((block) => {
+				if (block.getAttribute("data-copy") == "false") {
+					return;
+				}
 				// 1. Create the button
 				const button = document.createElement('button');
 				button.className = 'absolute top-2 right-2 text-xs bg-zinc-800 text-zinc-300 px-2 py-1 rounded hover:bg-zinc-700 transition-colors border border-zinc-700';
@@ -34,11 +41,12 @@ const { title } = Astro.props;
 
 				// 3. Add click logic
 				button.addEventListener('click', async () => {
-				await navigator.clipboard.writeText(block.innerText);
-				button.innerText = 'Copied!';
-				setTimeout(() => button.innerText = 'Copy', 2000);
+					await navigator.clipboard.writeText(block.innerText);
+					button.innerText = 'Copied!';
+					setTimeout(() => button.innerText = 'Copy', 2000);
 				});
 			});
 		</script>
+		<Analytics/>
     </body>
 </html>

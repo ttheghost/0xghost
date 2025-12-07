@@ -1,0 +1,47 @@
+---
+const d = new Date()
+const currentYear = d.getFullYear();
+const currentMonth = d.getMonth();
+const commitHash = "0x" + Math.random().toString(16).slice(2, 9);
+---
+
+<footer class="fixed bottom-0 left-0 w-full bg-[#1e1e2e] border-t border-zinc-800 text-xs font-mono z-50">
+    <div class="flex justify-between items-center h-8 px-2 select-none">
+
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2 bg-blue-600/20 text-blue-400 px-2 py-0.5 rounded text-[10px]">
+                <span>main</span>
+                <span>{commitHash}</span>
+            </div>
+            <span class="text-zinc-500 hidden md:inline">INSERT MODE</span>
+        </div>
+
+        <div class="flex items-center gap-4 text-zinc-400">
+            <a href="/about" class="hover:text-zinc-100 flex items-center gap-1 transition-colors">
+                About
+            </a>
+            <a 
+                href="https://github.com/ttheghost/0xghost" 
+                target="_blank" 
+                class="hover:text-zinc-100 flex items-center gap-1 transition-colors"
+            >
+                <span class="text-green-400">●</span> 
+                Open Source
+            </a>
+
+            <span class="text-zinc-700">|</span>
+
+            <a href="https://astro.build" target="_blank" class="hover:text-orange-400 transition-colors">
+                Built with Astro 🚀
+            </a>
+
+            <span class="hidden md:inline text-zinc-600">
+                hosted on <a href="https://vercel.com" class="hover:text-white transition-colors">Vercel ▲</a>
+            </span>
+
+            <div class="bg-zinc-800 px-2 py-0.5 rounded text-zinc-300">
+                Ln {currentYear}, Col {currentMonth}
+            </div>
+        </div>
+    </div>
+</footer>
