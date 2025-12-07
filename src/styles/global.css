@@ -1,31 +1,80 @@
 @import "tailwindcss";
 @import "@fontsource/jetbrains-mono";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-mono: "JetBrains Mono", monospace;
+  --color-zinc-950: #09090b;
+  --color-zinc-900: #18181b;
+  --color-zinc-800: #27272a;
+}
 
 :root {
-  --bg-color: #09090b; 
+  color-scheme: dark;
 }
 
 body {
-  background-color: var(--bg-color);
-  font-family: 'JetBrains Mono', monospace;
+  @apply bg-zinc-950 text-zinc-300 font-mono antialiased selection:bg-green-900 selection:text-green-100;
 }
 
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #09090b; 
-}
-::-webkit-scrollbar-thumb {
-  background: #27272a; 
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46; 
-}
+/* Making the blog look good */
+@layer utilities {
+  .prose {
+    @apply max-w-none;
+    
+    /* Headings */
+    & h1, & h2, & h3, & h4 {
+      @apply text-zinc-100 font-bold tracking-tight scroll-mt-20;
+    }
+    & h1 { @apply text-3xl mb-8 border-b border-zinc-800 pb-4; }
+    & h2 { @apply text-2xl mt-12 mb-6 flex items-center; }
+    
+    /* Links */
+    & a {
+      @apply text-blue-400 no-underline border-b border-blue-400/30 hover:border-blue-400 transition-colors;
+    }
+    
+    /* Inline Code */
+    & :not(pre) > code {
+      @apply bg-zinc-800 text-pink-400 px-1.5 py-0.5 rounded border border-zinc-700/50 text-sm font-normal before:content-[''] after:content-[''];
+    }
 
-@layer components {
-  .prose pre {
-    @apply rounded-lg border border-zinc-800 my-6;
+    /* Blockquotes (Standard) */
+    & blockquote {
+      @apply border-l-4 border-zinc-700 pl-4 italic text-zinc-400;
+    }
+
+    /* Tables */
+    & table {
+      @apply w-full text-left border-collapse my-8;
+    }
+    & th {
+      @apply border-b border-zinc-700 pb-2 text-zinc-100 font-bold;
+    }
+    & td {
+      @apply border-b border-zinc-800 py-3 text-zinc-400;
+    }
   }
+
+  /* 3. GitHub-Style Alerts */
+  .markdown-alert {
+    @apply border-l-4 p-4 my-6 rounded-r bg-zinc-900/50 text-sm;
+  }
+  
+  .markdown-alert-title {
+    @apply flex items-center gap-2 font-bold mb-2 text-xs uppercase tracking-wider;
+  }
+
+  /* Alert Colors */
+  .markdown-alert-note { @apply border-blue-500; }
+  .markdown-alert-note .markdown-alert-title { @apply text-blue-400; }
+  
+  .markdown-alert-tip { @apply border-green-500; }
+  .markdown-alert-tip .markdown-alert-title { @apply text-green-400; }
+  
+  .markdown-alert-warning { @apply border-yellow-500; }
+  .markdown-alert-warning .markdown-alert-title { @apply text-yellow-400; }
+  
+  .markdown-alert-caution { @apply border-red-500; }
+  .markdown-alert-caution .markdown-alert-title { @apply text-red-400; }
 }

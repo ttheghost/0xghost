@@ -15,11 +15,12 @@ const { title } = Astro.props;
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 	</head>
-	<body class="max-w-3xl mx-auto px-6 py-12 antialiased">
+	<body class="max-w-6xl mx-auto px-6 py-12 antialiased">
 		<slot />
 
 		<div class="h-12"></div> <Footer /> </body>
 		<script>
+			// Add copy button to code blocks that doesn't have data-copy attr as false
 			const blocks = document.querySelectorAll('pre');
 
 			blocks.forEach((block) => {
@@ -45,6 +46,20 @@ const { title } = Astro.props;
 					button.innerText = 'Copied!';
 					setTimeout(() => button.innerText = 'Copy', 2000);
 				});
+			});
+
+			// Add and auto generator for "Deep Links" to Headings
+			const headings = document.querySelectorAll('.prose h2, .prose h3');
+			headings.forEach((heading) => {
+				if (!heading.id) return;
+
+				const link = document.createElement('a');
+				link.href = `#${heading.id}`;
+				link.className = 'ml-2 text-zinc-700 hover:text-zinc-400 transition-colors no-underline opacity-0 group-hover:opacity-100';
+				link.innerText = '#';
+				
+				heading.classList.add('group', 'relative');
+				heading.appendChild(link);
 			});
 		</script>
 		<Analytics/>

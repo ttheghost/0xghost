@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import TerminalWindow from '../../components/TerminalWindow.astro';
+
+export async function getStaticPaths({ paginate }) {
+  const posts = (await getCollection('blog')).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  );
+  
+  // Clean logic: 6 posts per page
+  return paginate(posts, { pageSize: 6 });
+}
+
+const { page } = Astro.props;
+---
+
+<Layout title={`Blog // Page ${page.currentPage}`}>
+  <div class="space-y-8">
+    
+    <div class="grid gap-8 md:grid-cols-2">
+      {page.data.map((post) => (
+        <TerminalWindow title="log-entry">
+           <a href={`/blog/${post.id}`} class="block h-full group">
+             <h2 class="text-xl font-bold group-hover:text-green-400 transition-colors">
+               {post.data.title}
+             </h2>
+             <p class="text-zinc-500 mt-2 text-sm line-clamp-3">
+               {post.data.description}
+             </p>
+           </a>
+        </TerminalWindow>
+      ))}
+    </div>
+
+    <div class="flex justify-center gap-4 mt-12 font-mono text-sm">
+      {page.url.prev ? (
+        <a href={page.url.prev} class="px-4 py-2 border border-zinc-800 hover:bg-zinc-900 rounded">
+          &lt; PREV
+        </a>
+      ) : <span class="px-4 py-2 text-zinc-700 opacity-50">&lt; PREV</span>}
+
+      <span class="px-4 py-2 text-zinc-500">
+        PAGE {page.currentPage} / {page.lastPage}
+      </span>
+
+      {page.url.next ? (
+        <a href={page.url.next} class="px-4 py-2 border border-zinc-800 hover:bg-zinc-900 rounded">
+          NEXT &gt;
+        </a>
+      ) : <span class="px-4 py-2 text-zinc-700 opacity-50">NEXT &gt;</span>}
+    </div>
+
+  </div>
+</Layout>
