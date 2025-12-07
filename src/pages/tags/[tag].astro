@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import TerminalWindow from '../../components/TerminalWindow.astro';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog');
+
+  // Extract all unique tags
+  const uniqueTags = [...new Set(allPosts.map((post) => post.data.tags).flat())];
+
+  return uniqueTags.map((tag) => {
+    const filteredPosts = allPosts.filter((post) => post.data.tags.includes(tag));
+    return {
+      params: { tag },
+      props: { posts: filteredPosts },
+    };
+  });
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<Layout title={`Tag: #${tag}`}>
+  <h1 class="text-3xl font-bold mb-8 flex items-center gap-2">
+    <span class="text-zinc-600">grep</span>
+    <span class="text-blue-400">"{tag}"</span>
+    <span class="text-zinc-600">./blog/*</span>
+  </h1>
+
+  <div class="grid gap-6">
+    {posts.map((post) => (
+      <TerminalWindow title="match found">
+        <a href={`/blog/${post.id}`} class="block group">
+           <h2 class="text-xl font-bold group-hover:text-green-400 transition-colors">{post.data.title}</h2>
+           <p class="text-zinc-500 mt-2">{post.data.description}</p>
+        </a>
+      </TerminalWindow>
+    ))}
+  </div>
+</Layout>
