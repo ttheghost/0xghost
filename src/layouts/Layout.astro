@@ -1,22 +1,44 @@
+---
+import '../styles/global.css';
+const { title } = Astro.props;
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="en" class="bg-zinc-950 text-zinc-100">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>{title}</title>
 	</head>
-	<body>
+	<body class="max-w-3xl mx-auto px-6 py-12 antialiased">
 		<slot />
-	</body>
-</html>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+		<script>
+			const blocks = document.querySelectorAll('pre');
+
+			blocks.forEach((block) => {
+				// 1. Create the button
+				const button = document.createElement('button');
+				button.className = 'absolute top-2 right-2 text-xs bg-zinc-800 text-zinc-300 px-2 py-1 rounded hover:bg-zinc-700 transition-colors border border-zinc-700';
+				button.innerText = 'Copy';
+				
+				// 2. Wrap the pre in a relative container so button positions correctly
+				const wrapper = document.createElement('div');
+				wrapper.className = 'relative group';
+				
+				block.parentNode.insertBefore(wrapper, block);
+				wrapper.appendChild(block);
+				wrapper.appendChild(button);
+
+				// 3. Add click logic
+				button.addEventListener('click', async () => {
+				await navigator.clipboard.writeText(block.innerText);
+				button.innerText = 'Copied!';
+				setTimeout(() => button.innerText = 'Copy', 2000);
+				});
+			});
+		</script>
+    </body>
+</html>

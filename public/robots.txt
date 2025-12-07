@@ -1,0 +1,17 @@
+# Block all bots from crawling private areas
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+Disallow: /*.json$
+Disallow: /search
+Allow: /
+
+# Sitemap location
+Sitemap: http://localhost:4321/sitemap.xml
+
+User-agent: AdsBot-Google
+Allow: /
+
+User-agent: Googlebot
+Allow: /

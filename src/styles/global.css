@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@layer components {
+  .prose pre {
+    @apply rounded-lg border border-zinc-800 my-6;
+  }
+}

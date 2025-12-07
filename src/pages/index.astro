@@ -1,11 +1,40 @@
 ---
-import Welcome from '../components/Welcome.astro';
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// Get posts and sort by date (newest first)
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="My C++ Dev Blog">
+  <header class="mb-16">
+    <h1 class="text-4xl font-bold tracking-tight mb-4">Hello, I'm a Developer.</h1>
+    <p class="text-zinc-400 text-lg">
+      Welcome to my digital garden. I write about C++, Compilers, and Systems.
+    </p>
+  </header>
+
+  <section class="space-y-8">
+    {posts.map((post) => (
+      <a href={`/blog/${post.id}`} class="block group">
+        <article class="p-6 -mx-6 rounded-2xl hover:bg-zinc-900/50 transition-colors">
+          <h2 class="text-xl font-semibold group-hover:text-blue-400 transition-colors">
+            {post.data.title}
+          </h2>
+          <p class="text-zinc-400 mt-2 line-clamp-2">
+            {post.data.description}
+          </p>
+          <div class="mt-4 flex gap-2">
+            {post.data.tags.map(tag => (
+              <span class="text-xs font-mono bg-zinc-800 text-zinc-300 px-2 py-1 rounded">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        </article>
+      </a>
+    ))}
+  </section>
 </Layout>
