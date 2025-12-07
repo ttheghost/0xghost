@@ -1,0 +1,32 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="SIGSEGV">
+  <div class="flex flex-col items-center justify-center min-h-[60vh] text-center font-mono">
+    
+    <div class="text-red-500 text-6xl font-bold mb-4 animate-pulse">
+      SIGSEGV
+    </div>
+    
+    <h1 class="text-2xl text-zinc-100 mb-2">Segmentation fault (core dumped)</h1>
+    
+    <p class="text-zinc-500 max-w-md mb-8">
+      The process tried to access a memory page that is restricted or does not exist (404).
+      <br>
+      Address: <span class="text-blue-400">{Astro.url.pathname}</span>
+    </p>
+
+    <div class="bg-zinc-900 p-4 rounded border border-zinc-800 text-left text-xs text-zinc-400 mb-8 w-full max-w-md overflow-hidden">
+      <p>Stack trace:</p>
+      <p class="text-zinc-600">#0  0x00007ffe in <span class="text-red-400">Request::handle()</span></p>
+      <p class="text-zinc-600">#1  0x00007fff in <span class="text-red-400">Router::dispatch()</span></p>
+      <p class="text-zinc-600">#2  0x00008000 in <span class="text-blue-400">main()</span></p>
+    </div>
+
+    <a href="/" class="px-6 py-2 border border-green-500/50 text-green-400 hover:bg-green-500/10 transition-colors rounded">
+      ./reboot_system.sh
+    </a>
+
+  </div>
+</Layout>
