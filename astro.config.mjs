@@ -15,7 +15,16 @@ export default defineConfig({
   integrations: [react(), sitemap()],
 
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+
+    define: {
+      __dirname: '""',
+      'process.env.NODE_ENV': '"production"',
+    },
+
+    ssr: {
+      external: ['node:fs', 'node:path', 'node:os', 'canvaskit-wasm'],
+    }
   },
 
   markdown: {
