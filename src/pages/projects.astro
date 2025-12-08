@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import TerminalWindow from "../components/TerminalWindow.astro";
+import { Github } from "@lucide/astro";
 
 const projects = [
   {
@@ -72,8 +73,9 @@ const projects = [
                 <a
                   href={project.link}
                   target="_blank"
-                  class="px-4 py-2 bg-zinc-100 text-zinc-950 font-bold rounded hover:bg-white transition-colors text-sm"
+                  class="px-4 py-2 bg-zinc-100 text-zinc-950 font-bold rounded hover:bg-white transition-colors text-sm flex items-center gap-2"
                 >
+                  <Github class="w-4 h-4" />
                   View Source
                 </a>
               </div>

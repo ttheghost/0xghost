@@ -1,11 +1,11 @@
 ---
 const pathname = Astro.url.pathname;
+import { Home, Terminal, BookOpen } from "@lucide/astro";
 const currentPath = pathname === "/" ? "~" : "~" + pathname.replace(/\/$/, "");
 ---
 
 <nav class="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 border-b border-zinc-800 bg-zinc-950/90 supports-backdrop-blur:bg-zinc-950/60">
   <div class="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between font-mono text-sm">
-    
     <div class="flex items-center gap-2">
       <span class="text-green-400 font-bold">➜</span>
       <span class="text-blue-400">0xGhost</span>
@@ -14,13 +14,16 @@ const currentPath = pathname === "/" ? "~" : "~" + pathname.replace(/\/$/, "");
     </div>
 
     <div class="flex gap-6 text-zinc-400">
-      <a href="/" class={`hover:text-zinc-100 transition-colors ${pathname === '/' ? 'text-white font-bold' : ''}`}>
+      <a href="/" class={`hover:text-zinc-100 transition-colors flex items-center gap-1 ${pathname === "/" ? "text-white font-bold" : ""}`}>
+        <Home class="w-4 h-4" />
         /home
       </a>
-      <a href="/projects" class={`hover:text-zinc-100 transition-colors ${pathname.startsWith('/projects') ? 'text-white font-bold' : ''}`}>
+      <a href="/projects" class={`hover:text-zinc-100 transition-colors flex items-center gap-1 ${pathname.startsWith("/projects") ? "text-white font-bold" : ""}`}>
+        <Terminal class="w-4 h-4" />
         /bin
       </a>
-      <a href="/blog" class={`hover:text-zinc-100 transition-colors ${pathname.startsWith('/blog') ? 'text-white font-bold' : ''}`}>
+      <a href="/blog" class={`hover:text-zinc-100 transition-colors flex items-center gap-1 ${pathname.startsWith("/blog") ? "text-white font-bold" : ""}`}>
+        <BookOpen class="w-4 h-4" />
         /logs
       </a>
     </div>
