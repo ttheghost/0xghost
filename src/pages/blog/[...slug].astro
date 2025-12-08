@@ -20,9 +20,10 @@ const { post, prevPost, nextPost } = Astro.props;
 const { Content, headings } = await render(post);
 const wordCount = post.body ? post.body.split(/\s+/g).length : 0;
 const readingTime = Math.ceil(wordCount / 200);
+const ogImage = `/og/${post.id}.png`;
 ---
 
-<Layout title={post.data.title}>
+<Layout title={post.data.title} description={post.data.description} image={ogImage}>
   <div class="fixed top-14 left-0 h-0.5 bg-gradient-to-r from-blue-500 to-green-500 z-50 animate-scroll-progress w-full origin-left transform" style="transform: scaleX(0);"></div>
 
   <div class="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-8">

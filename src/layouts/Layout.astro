@@ -5,13 +5,13 @@ import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import Analytics from '@vercel/analytics/astro';
 
-const { title, description = "Systems engineering, C++, and compilers." } = Astro.props;
+const { title, description = "Systems engineering, C++, and compilers.", image } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en" class="bg-zinc-950 text-zinc-100">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={title} description={description} image={image} />
 	</head>
 	<body class="max-w-6xl mx-auto px-6 py-12 antialiased">
 		<Navbar />
