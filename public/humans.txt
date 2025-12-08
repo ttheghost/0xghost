@@ -1,0 +1,14 @@
+/* TEAM */
+  Creator: Mohammed Ifkirne (0xGhost)
+  Site: 0xGhost.vercel.app
+  Location: Morocco
+  Role: C++ Developer / Systems Engineer
+
+/* TECH STACK */
+  Kernel: Astro 5.0
+  Shell: React + Tailwind v4
+  Host: Vercel Hobby
+  Font: JetBrains Mono
+
+/* QUOTE */
+  "Understanding the machine is the only way to master it."

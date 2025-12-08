@@ -12,7 +12,13 @@ const { title, description, image = "/default-og.png" } = Astro.props;
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/favicon.svg" />
+<link rel="mask-icon" href="/favicon.svg" color="#4ade80" />
 <meta name="generator" content={Astro.generator} />
+
+<link rel="manifest" href="/manifest.json" />
+<meta name="theme-color" content="#09090b" />
+<link type="text/plain" rel="author" href="/humans.txt" />
 
 <link rel="canonical" href={canonicalURL} />
 
