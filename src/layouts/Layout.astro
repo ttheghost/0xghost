@@ -35,12 +35,10 @@ const { title } = Astro.props;
 				if (block.getAttribute("data-copy") == "false") {
 					return;
 				}
-				// 1. Create the button
 				const button = document.createElement('button');
 				button.className = 'absolute top-2 right-2 text-xs bg-zinc-800 text-zinc-300 px-2 py-1 rounded hover:bg-zinc-700 transition-colors border border-zinc-700';
 				button.innerText = 'Copy';
 				
-				// 2. Wrap the pre in a relative container so button positions correctly
 				const wrapper = document.createElement('div');
 				wrapper.className = 'relative group';
 				
@@ -48,7 +46,6 @@ const { title } = Astro.props;
 				wrapper.appendChild(block);
 				wrapper.appendChild(button);
 
-				// 3. Add click logic
 				button.addEventListener('click', async () => {
 					await navigator.clipboard.writeText(block.innerText);
 					button.innerText = 'Copied!';
