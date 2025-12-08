@@ -21,5 +21,7 @@ export default defineConfig({
     remarkPlugins: [remarkGithubAdmonitionsToDirectives],
   },
 
-  adapter: cloudflare()
+  adapter: cloudflare({
+    imageService: 'compile',
+  })
 });
