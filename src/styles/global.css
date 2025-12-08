@@ -78,3 +78,8 @@ body {
   .markdown-alert-caution { @apply border-red-500; }
   .markdown-alert-caution .markdown-alert-title { @apply text-red-400; }
 }
+
+.animate-scroll-progress {
+  transform-origin: 0%;
+  transition: transform 0.1s ease-out;
+}

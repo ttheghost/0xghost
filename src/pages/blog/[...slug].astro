@@ -5,64 +5,103 @@ import TerminalWindow from '../../components/TerminalWindow.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  return posts.map(post => ({
+  return posts.map((post, index) => ({
     params: { slug: post.id },
-    props: { post },
+    props: {
+      post,
+      prevPost: index + 1 < posts.length ? posts[index + 1] : null,
+      nextPost: index > 0 ? posts[index - 1] : null,
+    },
   }));
 }
 
-const { post } = Astro.props;
+const { post, prevPost, nextPost } = Astro.props;
 const { Content, headings } = await render(post);
 const wordCount = post.body ? post.body.split(/\s+/g).length : 0;
 const readingTime = Math.ceil(wordCount / 200);
 ---
 
 <Layout title={post.data.title}>
-  <div class="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-8">
+  <div class="fixed top-14 left-0 h-0.5 bg-gradient-to-r from-blue-500 to-green-500 z-50 animate-scroll-progress w-full origin-left transform" style="transform: scaleX(0);"></div>
 
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-8">
     <main>
       <TerminalWindow title={`src/posts/${post.id}`}>
-        <article class="prose prose-invert prose-zinc max-w-none prose-headings:font-bold prose-a:text-blue-400">
+        <article class="prose prose-invert prose-zinc max-w-none">
           
           <header class="mb-10 border-b border-zinc-800 pb-8">
-            <h1 class="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-zinc-100 to-zinc-400 bg-clip-text text-transparent">
+            <div class="flex flex-wrap gap-4 items-center text-xs font-mono text-zinc-500 mb-4">
+              <time class="flex items-center gap-1">
+                {post.data.pubDate.toLocaleDateString()}
+              </time>
+              <span class="flex items-center gap-1">
+                {readingTime} min
+               </span>
+            </div>
+
+            <h1 class="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-r from-zinc-100 to-zinc-400 bg-clip-text text-transparent">
               {post.data.title}
             </h1>
-            
-            <div class="flex gap-4 text-xs font-mono text-zinc-500">
-              <span class="flex items-center gap-1">
-                📅 {post.data.pubDate.toLocaleDateString()}
-              </span>
-              <span class="flex items-center gap-1">
-                ⏱️ {readingTime} min read
-              </span>
-              <span class="flex items-center gap-1">
-                 📝 {wordCount} words
-              </span>
+
+            <div class="flex flex-wrap gap-2">
+              {post.data.tags.map(tag => (
+                  <a
+                      href={`/tags/${tag}`}
+                      class="text-xs font-mono bg-zinc-900 border border-zinc-800 text-zinc-400 px-2 py-1 rounded hover:border-blue-500 hover:text-blue-400 transition-all no-underline"
+                  >
+                    #{tag}
+                  </a>
+              ))}
             </div>
           </header>
 
           <Content />
+
+          <footer class="mt-16 pt-8 border-t border-zinc-800 grid grid-cols-2 gap-4">
+            {prevPost ? (
+                <a href={`/blog/${prevPost.id}`} class="group block p-4 rounded border border-zinc-800 hover:bg-zinc-900/50 hover:border-zinc-700 transition-all no-underline">
+                  <div class="text-xs text-zinc-500 mb-1 font-mono group-hover:text-blue-400">&lt; PREVIOUS</div>
+                  <div class="font-bold text-zinc-300 group-hover:text-white line-clamp-1">{prevPost.data.title}</div>
+                </a>
+            ) : <div />}
+
+            {nextPost ? (
+                <a href={`/blog/${nextPost.id}`} class="group block p-4 rounded border border-zinc-800 hover:bg-zinc-900/50 hover:border-zinc-700 transition-all text-right no-underline">
+                  <div class="text-xs text-zinc-500 mb-1 font-mono group-hover:text-green-400">NEXT &gt;</div>
+                  <div class="font-bold text-zinc-300 group-hover:text-white line-clamp-1">{nextPost.data.title}</div>
+                </a>
+            ) : <div />}
+          </footer>
+
         </article>
       </TerminalWindow>
     </main>
 
     <aside class="hidden lg:block relative">
-      <div class="sticky top-12 p-4 rounded-lg border border-zinc-800/50 bg-zinc-900/30 backdrop-blur-sm">
-        <h2 class="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4">On this page</h2>
-        <ul class="space-y-2 text-sm">
+      <div class="sticky top-24 p-4 rounded-lg border border-zinc-800/50 bg-zinc-900/30 backdrop-blur-sm">
+        <h2 class="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4 font-mono">Symbols</h2>
+        <ul class="space-y-2 text-sm font-mono">
           {headings.map((heading) => (
-            <li class={`pl-${(heading.depth - 1) * 3}`}>
-              <a 
-                href={`#${heading.slug}`} 
-                class="block text-zinc-500 hover:text-blue-400 transition-colors border-l-2 border-transparent hover:border-blue-400 pl-3 py-1"
-              >
-                {heading.text}
-              </a>
-            </li>
+              <li class={`pl-${(heading.depth - 1) * 3}`}>
+                <a href={`#${heading.slug}`} class="block text-zinc-500 hover:text-blue-400 transition-colors border-l-2 border-transparent hover:border-blue-400 pl-3 py-1 line-clamp-1">
+                  {heading.text}
+                </a>
+              </li>
           ))}
         </ul>
       </div>
     </aside>
   </div>
 </Layout>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height);
+    const progressBar = document.querySelector('.animate-scroll-progress') as HTMLElement;
+    if (progressBar) {
+      progressBar.style.transform = `scaleX(${scrolled})`;
+    }
+  });
+</script>
