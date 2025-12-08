@@ -8,7 +8,7 @@ import remarkGithubAdmonitionsToDirectives from 'remark-github-blockquote-alert'
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://0xghost.pages.dev',
+  site: 'https://0xghost.dev/',
   integrations: [react(), sitemap()],
 
   vite: {
