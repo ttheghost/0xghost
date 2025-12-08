@@ -11,6 +11,7 @@ import cloudflare from '@astrojs/cloudflare';
 // https://astro.build/config
 export default defineConfig({
   // site: 'https://0xghost.vercel.app',
+  site: 'https://0xghost.pages.dev',
   integrations: [react(), sitemap()],
 
   vite: {
