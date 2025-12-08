@@ -1,0 +1,86 @@
+---
+import Layout from "../layouts/Layout.astro";
+import TerminalWindow from "../components/TerminalWindow.astro";
+
+const projects = [
+  {
+    name: "result.hpp",
+    cmd: "./result.hpp",
+    desc: "A lightweight, header-only, C++20 Result type for ergonomic error handling.",
+    stack: ["C++20", "error-handling", "header-only", "functions"],
+    link: "https://github.com/ttheghost/result.hpp",
+  } /*
+  {
+    name: "Aura",
+    cmd: "./aura --build kernel",
+    desc: "A low-level C-like language with manual memory management and LLVM backend.",
+    stack: ["Rust", "LLVM", "Compilers"],
+    link: "https://github.com/yourusername/aura",
+  },
+  {
+    name: "Project Aegis",
+    cmd: "./Aegis-cli run shader.hlsl",
+    desc: "GPGPU abstraction library for C++ providing a CUDA-like experience over D3D12.",
+    stack: ["C++20", "DirectX 12", "HLSL"],
+    link: "https://github.com/ttheghost/aegis",
+  },*/,
+  {
+    name: "Lox Tree-Walk Interpreter",
+    cmd: "./ltwi script.lox",
+    desc: "A C++ implementation of the Lox language from Crafting Interpreters. This project features a full tree-walker interpreter built from scratch in about 3000 lines of modern C++. It supports expressions, variables, functions, control flow, class inheritance, and static methods. Faithfully recreates jlox’s behavior and design.",
+    stack: ["C++20", "interpreter", "tree-walk", "lox"],
+    link: "https://github.com/ttheghost/loxpp-interpreter",
+  },
+];
+---
+
+<Layout title="0xGhost // Projects">
+  <div class="space-y-8">
+    <header>
+      <h1 class="text-3xl font-bold mb-4">/usr/bin/projects</h1>
+      <p class="text-zinc-400">Compiled binaries and ongoing experiments.</p>
+    </header>
+
+    <div class="grid gap-6 md:grid-cols-1">
+      {
+        projects.map((project) => (
+          <TerminalWindow
+            title={project.name.toLowerCase()}
+            class="group hover:border-zinc-600 transition-colors"
+          >
+            <div class="flex flex-col md:flex-row gap-6">
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-3">
+                  <span class="text-green-400 font-bold">$</span>
+                  <code class="text-sm bg-zinc-900 px-2 py-1 rounded text-zinc-300 border border-zinc-800">
+                    {project.cmd}
+                  </code>
+                </div>
+
+                <p class="text-zinc-400 mb-4 leading-relaxed">{project.desc}</p>
+
+                <div class="flex gap-2">
+                  {project.stack.map((tech) => (
+                    <span class="text-xs border border-zinc-800 bg-zinc-900/50 px-2 py-1 rounded text-blue-400">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div class="flex items-center">
+                <a
+                  href={project.link}
+                  target="_blank"
+                  class="px-4 py-2 bg-zinc-100 text-zinc-950 font-bold rounded hover:bg-white transition-colors text-sm"
+                >
+                  View Source
+                </a>
+              </div>
+            </div>
+          </TerminalWindow>
+        ))
+      }
+    </div>
+  </div>
+</Layout>
