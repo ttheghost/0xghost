@@ -122,7 +122,7 @@ Now that we understand what `std::move` really does, let's talk about how people
 
 ### Mistake 1: `return std::move(local_var)`: Breaking the Compiler's Best Optimization
 
-This is probably the single most common misuse of `std::move`. 
+This is probably the single most common misuse of `std::move`.
 
 ```cpp
 std::string createString() {
@@ -261,7 +261,6 @@ In modern C++, if you need to implement one of these special member functions, y
 5. Move Assignment Operator
 
 This is called the "Rule of Five" (it used to be the "Rule of Three" before move semantics existed). Let me show you a complete, correct implementation, and then we'll break down each piece:
-
 
 ```cpp
 class Resource {
@@ -449,7 +448,6 @@ void wrapper(T&& arg) {
 
 The key difference is that `std::forward` remembers what `arg` was when it was passed to `wrapper`, and maintains that. If you called `wrapper(x)` with an lvalue `x`, `std::forward<T>(arg)` produces an lvalue. If you called `wrapper(std::move(x))` with an rvalue, `std::forward<T>(arg)` produces an rvalue.
 
-
 Here's when to use each:
 
 - **Use `std::move`** when you know you want to move from something, and you're done with it
@@ -555,7 +553,7 @@ This is called "trivial relocation", the type can be relocated via a simple byte
 Two proposals are competing for this feature:
 
 - **P1144** (by Arthur O'Dwyer): Aligns with how libraries like Folly, BDE, and Qt already implement this
-- **P2786** (by Giuseppe D'Angelo and others): Was merged into the Working Draft at the Hagenberg 2024 meeting, but remains controversial
+- **P2786** (by Giuseppe D'Angelo and others): Was merged into the Working Draft at the Hagenberg 2025 meeting, but remains controversial
 
 The controversy stems from differences in semantics and interface. P2786 was merged despite concerns from implementers that its semantics don't match existing practice. Many major library maintainers prefer P1144's design.
 
@@ -871,7 +869,7 @@ In that case, C++ guarantees the next best thing: **Automatic Move**. The compil
 
 **The Takeaway**: You get the best of both worlds. Best case: zero cost (NRVO). Worst case: low cost (Move). You never pay the cost of a deep copy here.
 
-> [NOTE]
+> [!NOTE]
 > If you want to verify the move happens when NRVO is disabled, try compiling with -fno-elide-constructors on GCC/Clang. You will see the move constructor print immediately.
 
 - Compiler explorer link for the example: [https://godbolt.org/z/j4fbxEcWs](https://godbolt.org/z/j4fbxEcWs)
