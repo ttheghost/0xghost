@@ -19,7 +19,7 @@ export async function getStaticPaths() {
 const { post, prevPost, nextPost } = Astro.props;
 const { Content, headings } = await render(post);
 const wordCount = post.body ? post.body.split(/\s+/g).length : 0;
-const readingTime = Math.ceil(wordCount / 200);
+const readingTime = Math.ceil(wordCount / 180);
 const ogImage = `/og/${post.id}.png`;
 ---
 
@@ -28,7 +28,7 @@ const ogImage = `/og/${post.id}.png`;
 
   <div class="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-8">
     <main>
-      <TerminalWindow title={`src/posts/${post.id}`}>
+      <TerminalWindow title={`src/posts/${post.id}`} id="blog-post-area">
         <article class="prose prose-invert prose-zinc max-w-none">
           
           <header class="mb-10 border-b border-zinc-800 pb-8">
@@ -81,8 +81,8 @@ const ogImage = `/og/${post.id}.png`;
       <Comments />
     </main>
 
-    <aside class="hidden lg:block relative">
-      <div class="sticky top-24 p-4 rounded-lg border border-zinc-800/50 bg-zinc-900/30 backdrop-blur-sm">
+    <aside class="hidden lg:block sticky top-24 h-[calc(100vh-9rem)] overflow-y-auto">
+      <div class="p-4 rounded-lg border border-zinc-800/50 bg-zinc-900/30 backdrop-blur-sm">
         <h2 class="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4 font-mono">Symbols</h2>
         <ul class="space-y-2 text-sm font-mono">
           {headings.map((heading) => (

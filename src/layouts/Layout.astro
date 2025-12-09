@@ -69,6 +69,12 @@ const { title, description = "Systems engineering, C++, and compilers.", image }
 				heading.classList.add('group', 'relative');
 				heading.appendChild(link);
 			});
+
+			const contentArea = document.querySelectorAll('blog-post-area a[href^="http"]');
+			contentArea.forEach((link) => {
+				link.setAttribute('target', '_blank');
+				link.setAttribute('rel', 'noopener noreferrer');
+			});
 		</script>
     </body>
 </html>
