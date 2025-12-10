@@ -1,13 +1,13 @@
 /* TEAM */
   Creator: Mohammed Ifkirne (0xGhost)
-  Site: 0xGhost.vercel.app
+  Site: 0xGhost.dev
   Location: Morocco
-  Role: C++ Developer / Systems Engineer
+  Role: Software Engineer Student / C++ Developer / Low Level Developer
 
 /* TECH STACK */
   Kernel: Astro 5.0
   Shell: React + Tailwind v4
-  Host: Vercel Hobby
+  Host: Cloudflare Pages
   Font: JetBrains Mono
 
 /* QUOTE */

@@ -1,10 +1,14 @@
 ---
-import '../styles/global.css';
-import BaseHead from '../components/BaseHead.astro';
-import Navbar from '../components/Navbar.astro';
-import Footer from '../components/Footer.astro';
+import "../styles/global.css";
+import BaseHead from "../components/BaseHead.astro";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
 
-const { title, description = "Systems engineering, C++, and compilers.", image } = Astro.props;
+const {
+	title,
+	description = "Systems engineering, C++, and compilers.",
+	image,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -27,54 +31,60 @@ const { title, description = "Systems engineering, C++, and compilers.", image }
 			console.log(
 				"%c 0xGhost: %c System Online",
 				"background: #4ade80; color: #000; padding: 2px 4px; border-radius: 2px; font-weight: bold;",
-				"color: #4ade80;"
+				"color: #4ade80;",
 			);
-			console.log("Looking for the source? it's open: https://github.com/ttheghost/0xghost");
+			console.log(
+				"Looking for the source? it's open: https://github.com/ttheghost/0xghost",
+			);
 
 			// Add copy button to code blocks that doesn't have data-copy attr as false
-			const blocks = document.querySelectorAll('pre');
+			const blocks = document.querySelectorAll("pre");
 
 			blocks.forEach((block) => {
 				if (block.getAttribute("data-copy") == "false") {
 					return;
 				}
-				const button = document.createElement('button');
-				button.className = 'absolute top-2 right-2 text-xs bg-zinc-800 text-zinc-300 px-2 py-1 rounded hover:bg-zinc-700 transition-colors border border-zinc-700';
-				button.innerText = 'Copy';
-				
-				const wrapper = document.createElement('div');
-				wrapper.className = 'relative group';
-				
+				const button = document.createElement("button");
+				button.className =
+					"absolute top-2 right-2 text-xs bg-zinc-800 text-zinc-300 px-2 py-1 rounded hover:bg-zinc-700 transition-colors border border-zinc-700";
+				button.innerText = "Copy";
+
+				const wrapper = document.createElement("div");
+				wrapper.className = "relative group";
+
 				block.parentNode.insertBefore(wrapper, block);
 				wrapper.appendChild(block);
 				wrapper.appendChild(button);
 
-				button.addEventListener('click', async () => {
+				button.addEventListener("click", async () => {
 					await navigator.clipboard.writeText(block.innerText);
-					button.innerText = 'Copied!';
-					setTimeout(() => button.innerText = 'Copy', 2000);
+					button.innerText = "Copied!";
+					setTimeout(() => (button.innerText = "Copy"), 2000);
 				});
 			});
 
 			// Add and auto generator for "Deep Links" to Headings
-			const headings = document.querySelectorAll('.prose h2, .prose h3');
+			const headings = document.querySelectorAll(".prose h2, .prose h3");
 			headings.forEach((heading) => {
 				if (!heading.id) return;
 
-				const link = document.createElement('a');
+				const link = document.createElement("a");
 				link.href = `#${heading.id}`;
-				link.className = 'ml-2 text-zinc-700 hover:text-zinc-400 transition-colors no-underline opacity-0 group-hover:opacity-100';
-				link.innerText = '#';
-				
-				heading.classList.add('group', 'relative');
+				link.className =
+					"ml-2 text-zinc-700 hover:text-zinc-400 transition-colors no-underline opacity-0 group-hover:opacity-100";
+				link.innerText = "#";
+
+				heading.classList.add("group", "relative");
 				heading.appendChild(link);
 			});
 
-			const contentArea = document.querySelectorAll('article a[href^="http"]');
+			const contentArea = document.querySelectorAll(
+				'article a[href^="http"]',
+			);
 			contentArea.forEach((link) => {
-				link.setAttribute('target', '_blank');
-				link.setAttribute('rel', 'noopener noreferrer');
+				link.setAttribute("target", "_blank");
+				link.setAttribute("rel", "noopener noreferrer");
 			});
 		</script>
-    </body>
+	</body>
 </html>

@@ -1,15 +1,15 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import TerminalWindow from '../components/TerminalWindow.astro';
+import Layout from "../layouts/Layout.astro";
+import TerminalWindow from "../components/TerminalWindow.astro";
 ---
 
 <Layout title="System Info">
   <div class="max-w-2xl mx-auto">
     <TerminalWindow title="neofetch">
       <div class="flex flex-col md:flex-row gap-8 font-mono text-sm">
-        
         <div class="text-blue-500 select-none hidden md:block leading-tight">
-          <pre data-copy="false">
+          <pre
+            data-copy="false">
        /\        
       /  \       
      / /\ \      
@@ -24,25 +24,37 @@ import TerminalWindow from '../components/TerminalWindow.astro';
             <span class="text-blue-400 font-bold">user@0xGhost</span>
             <span class="text-zinc-500">-----------------</span>
           </div>
-          
+
           <div class="grid grid-cols-[100px_1fr] gap-x-4">
             <span class="text-green-400">OS</span>
-            <span class="text-zinc-300">Arch Linux (btw)</span>
+            <span class="text-zinc-300">Unknown</span>
 
             <span class="text-green-400">Host</span>
-            <span class="text-zinc-300">Vercel Hobby Tier</span>
+            <span class="text-zinc-300">Cloudflare</span>
 
             <span class="text-green-400">Kernel</span>
             <span class="text-zinc-300">Astro 5.0</span>
 
-            <span class="text-green-400">Shell</span>
-            <span class="text-zinc-300">Zsh 5.9</span>
+            <span class="text-green-400">Primary Languages</span>
+            <span class="text-zinc-300">C, C++, Rust</span>
+
+            <span class="text-green-400">Focus Areas</span>
+            <span class="text-zinc-300">Low-level systems, OS, Compilers</span>
 
             <span class="text-green-400">Theme</span>
             <span class="text-zinc-300">0xGhost Dark (Custom)</span>
-            
+
+            <span class="text-green-400">E-mail:</span>
+            <a
+              href="mailto:me@0xghost.dev"
+              class="text-blue-400 hover:underline">me@0xghost.dev</a
+            >
+
             <span class="text-green-400">Source</span>
-            <a href="https://github.com/ttheghost/0xghost" class="text-blue-400 hover:underline">/src/github/repo</a>
+            <a
+              href="https://github.com/ttheghost/0xghost"
+              class="text-blue-400 hover:underline">/ttheghost/0xghost</a
+            >
           </div>
 
           <div class="flex gap-2 mt-4">
@@ -55,8 +67,32 @@ import TerminalWindow from '../components/TerminalWindow.astro';
             <div class="w-6 h-3 bg-cyan-500"></div>
             <div class="w-6 h-3 bg-white"></div>
           </div>
-        </div>
 
+          <div class="mt-8 pt-6 border-t border-zinc-800">
+            <div class="mb-3">
+              <span class="text-green-400">$</span>
+              <span class="text-zinc-300"> fund --project 0xghost</span>
+            </div>
+            <p class="text-zinc-500 text-sm mb-4">
+              If you find my work helpful, consider supporting my open source
+              contributions and technical writing.
+            </p>
+            <div class="flex gap-3 flex-wrap">
+              <a
+                href="https://ko-fi.com/0xghost"
+                target="_blank"
+                class="flex items-center gap-2 px-4 py-2 rounded bg-zinc-800 border border-zinc-700 hover:border-blue-400 hover:text-blue-400 transition-all"
+              >
+                <img
+                  src="https://storage.ko-fi.com/cdn/logomarkLogo.png"
+                  alt="Ko-fi tips"
+                  class="w-4"
+                />
+                <span class="text-sm">Buy me a tea ($3)</span>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </TerminalWindow>
   </div>

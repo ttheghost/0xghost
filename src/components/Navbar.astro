@@ -4,27 +4,43 @@ import { Home, Terminal, BookOpen } from "@lucide/astro";
 const currentPath = pathname === "/" ? "~" : "~" + pathname.replace(/\/$/, "");
 ---
 
-<nav class="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 border-b border-zinc-800 bg-zinc-950/90 supports-backdrop-blur:bg-zinc-950/60">
-  <div class="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between font-mono text-sm">
-    <div class="flex items-center gap-2">
-      <span class="text-green-400 font-bold">➜</span>
-      <span class="text-blue-400">0xGhost</span>
-      <span class="text-zinc-600">in</span>
-      <span class="text-yellow-400">{currentPath}</span>
+<nav
+  class="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 border-b border-zinc-800 bg-zinc-950/90 supports-backdrop-blur:bg-zinc-950/60"
+>
+  <div
+    class="max-w-3xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between font-mono text-sm"
+  >
+    <div class="flex items-center gap-2 min-w-0 flex-1 sm:flex-none">
+      <span class="text-green-400 font-bold flex-shrink-0">➜</span>
+      <span class="text-blue-400 flex-shrink-0">0xGhost</span>
+      <span class="text-zinc-600 hidden sm:inline flex-shrink-0">in</span>
+      <span
+        class="text-yellow-400 truncate max-w-[120px] sm:max-w-[200px] md:max-w-none"
+        >{currentPath}</span
+      >
     </div>
 
-    <div class="flex gap-6 text-zinc-400">
-      <a href="/" class={`hover:text-zinc-100 transition-colors flex items-center gap-1 ${pathname === "/" ? "text-white font-bold" : ""}`}>
+    <div class="flex gap-3 sm:gap-6 text-zinc-400 flex-shrink-0">
+      <a
+        href="/"
+        class={`hover:text-zinc-100 transition-colors flex items-center gap-1 ${pathname === "/" ? "text-white font-bold" : ""}`}
+      >
         <Home class="w-4 h-4" />
-        /home
+        <span class="hidden sm:inline">/home</span>
       </a>
-      <a href="/projects" class={`hover:text-zinc-100 transition-colors flex items-center gap-1 ${pathname.startsWith("/projects") ? "text-white font-bold" : ""}`}>
+      <a
+        href="/projects"
+        class={`hover:text-zinc-100 transition-colors flex items-center gap-1 ${pathname.startsWith("/projects") ? "text-white font-bold" : ""}`}
+      >
         <Terminal class="w-4 h-4" />
-        /bin
+        <span class="hidden sm:inline">/bin</span>
       </a>
-      <a href="/blog" class={`hover:text-zinc-100 transition-colors flex items-center gap-1 ${pathname.startsWith("/blog") ? "text-white font-bold" : ""}`}>
+      <a
+        href="/blog"
+        class={`hover:text-zinc-100 transition-colors flex items-center gap-1 ${pathname.startsWith("/blog") ? "text-white font-bold" : ""}`}
+      >
         <BookOpen class="w-4 h-4" />
-        /logs
+        <span class="hidden sm:inline">/logs</span>
       </a>
     </div>
   </div>
