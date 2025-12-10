@@ -8,7 +8,7 @@ Disallow: /search
 Allow: /
 
 # Sitemap location
-Sitemap: https://0xghost.vercel.app/sitemap-index.xml
+Sitemap: https://0xghost.dev/sitemap-index.xml
 
 User-agent: AdsBot-Google
 Allow: /
