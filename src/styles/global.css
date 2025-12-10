@@ -25,18 +25,38 @@ body {
     /* Headings */
     & h1, & h2, & h3, & h4 {
       @apply text-zinc-100 font-bold tracking-tight scroll-mt-20;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
-    & h1 { @apply text-3xl mb-8 border-b border-zinc-800 pb-4; }
-    & h2 { @apply text-2xl mt-12 mb-6 flex items-center; }
+    & h1 { @apply text-2xl sm:text-3xl mb-8 border-b border-zinc-800 pb-4; }
+    & h2 { @apply text-xl sm:text-2xl mt-12 mb-6 flex items-center; }
+    & h3 { @apply text-lg sm:text-xl; }
     
     /* Links */
     & a {
       @apply text-blue-400 no-underline border-b border-blue-400/30 hover:border-blue-400 transition-colors;
+      word-break: break-word;
     }
     
     /* Inline Code */
     & :not(pre) > code {
       @apply bg-zinc-800 text-pink-400 px-1.5 py-0.5 rounded border border-zinc-700/50 text-sm font-normal before:content-[''] after:content-[''];
+      word-break: break-word;
+      overflow-wrap: break-word;
+      max-width: 100%;
+      display: inline-block;
+    }
+
+    /* Code blocks */
+    & pre {
+      @apply overflow-x-auto;
+      max-width: 100%;
+    }
+
+    /* Paragraphs */
+    & p {
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }
 
     /* Blockquotes (Standard) */
@@ -47,6 +67,8 @@ body {
     /* Tables */
     & table {
       @apply w-full text-left border-collapse my-8;
+      overflow-x: auto;
+      display: block;
     }
     & th {
       @apply border-b border-zinc-700 pb-2 text-zinc-100 font-bold;
