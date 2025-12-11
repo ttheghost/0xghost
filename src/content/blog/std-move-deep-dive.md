@@ -599,7 +599,7 @@ A common "optimization" is wrapping return values in std::move. Does it help?
 
 Let me put these numbers in perspective:
 
-**Move vs Copy**: A correctly implemented move is approximately 7,250 times faster than a copy for this workload. That's not a typo, 7,250×. The copy requires allocating and copying 1 million objects. The move just swaps a few pointers.
+**Move vs Copy**: A correctly implemented move is approximately 7 times faster than a copy for this workload. That's not a typo, 7×. The copy requires allocating and copying 10'000 objects. The move just swaps a few pointers.
 
 **NRVO vs Move**: Modern compilers (like GCC 15) are smart enough to construct the return value directly in the caller's stack frame (Named Return Value Optimization). Adding `std::move` here doesn't make it faster, at best, it does nothing. At worst, it prevents the compiler from performing full elision.
 
