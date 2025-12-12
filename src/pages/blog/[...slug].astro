@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import TerminalWindow from "../../components/TerminalWindow.astro";
 import Comments from "../../components/Comments.astro";
+import Subscribe from "../../components/Subscribe.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -71,6 +72,8 @@ const ogImage = `/og/${post.id}.png`;
           </header>
 
           <Content />
+
+          <Subscribe />
 
           <footer
             class="mt-16 pt-8 border-t border-zinc-800 grid grid-cols-2 gap-4"
