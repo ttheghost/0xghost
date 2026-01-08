@@ -2,6 +2,7 @@
 title: "std::move doesn't move anything: A deep dive into Value Categories"
 description: "Why std::move is just a cast, how it kills RVO if used wrong, and the mechanics of ownership transfer."
 pubDate: 2025-12-09
+updatedDate: 2025-12-10
 tags: ["cpp", "performance", "systems"]
 ---
 

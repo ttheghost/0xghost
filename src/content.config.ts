@@ -7,7 +7,10 @@ const blog = defineCollection({
     title: z.string(),
     description: z.string(),
     pubDate: z.date(),
+    updatedDate: z.date().optional(),
     tags: z.array(z.string()),
+    videoUrl: z.string().optional(), // YouTube video URL for video posts
+    videoDuration: z.string().optional(), // e.g., "45:30" for display
   })
 });
 

@@ -8,13 +8,25 @@ const {
 	title,
 	description = "Systems engineering, C++, and compilers.",
 	image,
+	type = "website",
+	publishDate,
+	modifiedDate,
+	tags,
 } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en" class="bg-zinc-950 text-zinc-100">
 	<head>
-		<BaseHead title={title} description={description} image={image} />
+		<BaseHead
+			title={title}
+			description={description}
+			image={image}
+			type={type}
+			publishDate={publishDate}
+			modifiedDate={modifiedDate}
+			tags={tags}
+		/>
 	</head>
 	<body class="max-w-6xl mx-auto px-6 pb-12 antialiased">
 		<Navbar />

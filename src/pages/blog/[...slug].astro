@@ -4,6 +4,7 @@ import Layout from "../../layouts/Layout.astro";
 import TerminalWindow from "../../components/TerminalWindow.astro";
 import Comments from "../../components/Comments.astro";
 import Subscribe from "../../components/Subscribe.astro";
+import YouTubeEmbed from "../../components/YouTubeEmbed.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -28,6 +29,10 @@ const ogImage = `/og/${post.id}.png`;
   title={post.data.title}
   description={post.data.description}
   image={ogImage}
+  type="blog-post"
+  publishDate={post.data.pubDate}
+  modifiedDate={post.data.updatedDate}
+  tags={post.data.tags}
 >
   <div
     class="fixed top-14 left-0 h-0.5 bg-gradient-to-r from-blue-500 to-green-500 z-50 animate-scroll-progress w-full origin-left transform"
@@ -46,9 +51,25 @@ const ogImage = `/og/${post.id}.png`;
               <time class="flex items-center gap-1">
                 {post.data.pubDate.toLocaleDateString()}
               </time>
-              <span class="flex items-center gap-1">
-                {readingTime} min
-              </span>
+              {
+                post.data.videoUrl ? (
+                  <span class="flex items-center gap-1.5 px-2 py-0.5 bg-red-600/20 text-red-400 rounded border border-red-600/30">
+                    <svg
+                      class="w-3 h-3"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                    <span>VIDEO</span>
+                    {post.data.videoDuration && (
+                      <span>• {post.data.videoDuration}</span>
+                    )}
+                  </span>
+                ) : (
+                  <span class="flex items-center gap-1">{readingTime} min</span>
+                )
+              }
             </div>
 
             <h1
@@ -70,6 +91,16 @@ const ogImage = `/og/${post.id}.png`;
               }
             </div>
           </header>
+
+          {
+            post.data.videoUrl && (
+              <YouTubeEmbed
+                videoUrl={post.data.videoUrl}
+                title={post.data.title}
+                duration={post.data.videoDuration}
+              />
+            )
+          }
 
           <Content />
 

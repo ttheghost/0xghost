@@ -1,0 +1,167 @@
+---
+export interface Props {
+    type: "website" | "blog-post";
+    title: string;
+    description: string;
+    url: string;
+    image?: string;
+    author?: {
+        name: string;
+        url: string;
+    };
+    publishDate?: Date;
+    modifiedDate?: Date;
+    tags?: string[];
+}
+
+const {
+    type,
+    title,
+    description,
+    url,
+    image,
+    author = {
+        name: "0xGhost",
+        url: "https://0xghost.dev/about",
+    },
+    publishDate,
+    modifiedDate,
+    tags = [],
+} = Astro.props;
+
+const siteUrl = "https://0xghost.dev";
+
+const personSchema = {
+    "@type": "Person",
+    "@id": `${siteUrl}/#person`,
+    name: author.name,
+    url: author.url,
+    description:
+        "Systems engineer specializing in C++, compilers, and low-level programming",
+    sameAs: ["https://github.com/ttheghost"],
+};
+
+const organizationSchema = {
+    "@type": "WebSite",
+    "@id": `${siteUrl}/#website`,
+    url: siteUrl,
+    name: "0xGhost",
+    description: "Systems engineering, C++, and compilers.",
+    publisher: {
+        "@id": `${siteUrl}/#person`,
+    },
+    inLanguage: "en-US",
+};
+
+const blogPostSchema =
+    type === "blog-post"
+        ? {
+              "@context": "https://schema.org",
+              "@type": "BlogPosting",
+              "@id": url,
+              headline: title,
+              description: description,
+              url: url,
+              datePublished: publishDate?.toISOString(),
+              dateModified:
+                  modifiedDate?.toISOString() || publishDate?.toISOString(),
+              author: {
+                  "@id": `${siteUrl}/#person`,
+              },
+              publisher: {
+                  "@id": `${siteUrl}/#person`,
+              },
+              image: image ? `${siteUrl}${image}` : undefined,
+              keywords: tags.join(", "),
+              articleSection: "Technology",
+              inLanguage: "en-US",
+              mainEntityOfPage: {
+                  "@type": "WebPage",
+                  "@id": url,
+              },
+          }
+        : null;
+
+const webPageSchema =
+    type === "website"
+        ? {
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              "@id": url,
+              url: url,
+              name: title,
+              description: description,
+              isPartOf: {
+                  "@id": `${siteUrl}/#website`,
+              },
+              author: {
+                  "@id": `${siteUrl}/#person`,
+              },
+              inLanguage: "en-US",
+          }
+        : null;
+
+const baseSchema = {
+    "@context": "https://schema.org",
+    "@graph": [personSchema, organizationSchema],
+};
+
+const breadcrumbSchema =
+    type === "blog-post"
+        ? {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                  {
+                      "@type": "ListItem",
+                      position: 1,
+                      name: "Home",
+                      item: siteUrl,
+                  },
+                  {
+                      "@type": "ListItem",
+                      position: 2,
+                      name: "Blog",
+                      item: `${siteUrl}/blog`,
+                  },
+                  {
+                      "@type": "ListItem",
+                      position: 3,
+                      name: title,
+                      item: url,
+                  },
+              ],
+          }
+        : null;
+---
+
+<!-- Base Schema (Person + Organization) -->
+<script type="application/ld+json" set:html={JSON.stringify(baseSchema)} />
+
+<!-- Page-specific Schema -->{
+    blogPostSchema && (
+        <script
+            type="application/ld+json"
+            set:html={JSON.stringify(blogPostSchema)}
+        />
+    )
+}
+
+{
+    webPageSchema && (
+        <script
+            type="application/ld+json"
+            set:html={JSON.stringify(webPageSchema)}
+        />
+    )
+}
+
+<!-- Breadcrumb Schema -->
+{
+    breadcrumbSchema && (
+        <script
+            type="application/ld+json"
+            set:html={JSON.stringify(breadcrumbSchema)}
+        />
+    )
+}
