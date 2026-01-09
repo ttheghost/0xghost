@@ -72,11 +72,19 @@ Wrapper<T> createWrapper(T value) {
 
 "Perfect!" I thought. "Now I can move the value into the wrapper."
 
-But here's the problem: when you pass by value, the compiler **always makes a copy** of the argument to create `value`. So even if I passed in a temporary object, it would first copy it into `value`, and then move from `value` into the `Wrapper`.
+But there is a subtle inefficiency here. When we call this function, we have to construct the parameter `value` first.
 
-So we trade one copy for another. For lvalues (like named variables), that's fine, we *should* copy because the caller still needs their original object. But for rvalues (temporaries), modern C++ (C++ 17+) will actually move them into the parameter, then move again into the Wrapper. So we end up with two moves instead of one copy and one move. Not ideal, but not terrible either.
+- If we pass an **lvalue** (like a named variable), the compiler copies it into `value`.
+- If we pass an **rvalue** (a temporary), the compiler moves it into `value` (thanks to C++11 move semantics).
 
-> Remember from the previous article: moving is cheap (just pointer swaps), but copying can be expensive (allocating memory and copying data). We want to move from temporaries whenever possible.
+Then, inside the function, we move again from `value` into the `Wrapper`.
+
+The Cost:
+
+- For Temporaries: Move (into `param`) + Move (into `Wrapper`) = 2 Moves.
+- For Variables: Copy (into `param`) + Move (into `Wrapper`) = 1 Copy + 1 Move.
+
+For lightweight objects, two moves are fine. But for large objects or types where moving isn't just a pointer swap (like `std::array` or huge structs), that extra move is unnecessary overhead. We want 0 copies and 1 move.
 
 ### Attempt 2: Passing by const reference
 
@@ -85,11 +93,11 @@ Okey, let's avoid copies by using const references:
 ```cpp
 template<typename T>
 Wrapper<T> createWrapper(const T& value) {
-    return Wrapper<T>(value);
+    return Wrapper<T>(std::move(value));
 }
 ```
 
-This eliminates the copy when we call the function, which is good. But now we have a different problem: that `std::move(value)` doesn't actually do anything useful.
+This eliminates the overhead of creating the parameter value, which is good. But now we have a different problem: that `std::move(value)` doesn't actually do anything useful.
 
 Here's why: As we learned in the previous article, `std::move` is really just a cast to an rvalue reference. It's saying "treat this as moveable." But `value` is `const T&`, and when you cast it, you get `const T&&`.
 
@@ -102,6 +110,7 @@ We are stuck. We need something that could:
 - Accept both lvalues and rvalues
 - Copy from lvalues (because we have to preserve the original)
 - Move from rvalues (because they are about to die anyway)
+- Do it without the intermediate "double move" of pass-by-value.
 - Do this automatically, without writing two separate overloads for lvalues and rvalues
 
 This is where **template parameter deduction** and **perfect forwarding** come to the rescue.
