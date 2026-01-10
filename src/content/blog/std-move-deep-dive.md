@@ -292,10 +292,16 @@ public:
     Resource& operator=(const Resource& other) {
         std::cout << "Copy assigning Resource\n";
         if (this != &other) {  // Protect against self-assignment
+            // Allocate into a TEMPORARY pointer first.
+            int* new_data = new int[other.size];
+            
+            std::copy(other.data, other.data + other.size, new_data);
+            
             delete[] data;
+            
+            // Update the state
+            data = new_data;
             size = other.size;
-            data = new int[size];
-            std::copy(other.data, other.data + size, data);
         }
         return *this;
     }
