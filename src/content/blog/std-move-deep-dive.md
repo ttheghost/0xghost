@@ -48,7 +48,7 @@ And here's where things get interesting: `std::move` won't magically fix this pr
 
 Here's the truth that might surprise you: **`std::move` doesn't actually move anything**. Not a single byte of memory changes location when you call `std::move`. it's one of the most misleading named functions in the C++ standard library.
 
-So what does it acctually do? Let's look at the real implementation from the standard library (this is from [libstdc++](https://gcc.gnu.org/onlinedocs/gcc-4.8.0/libstdc++/api/a01367_source.html), but other standard libraries have similar implementations):
+So what does it actually do? Let's look at the real implementation from the standard library (this is from [libstdc++](https://gcc.gnu.org/onlinedocs/gcc-4.8.0/libstdc++/api/a01367_source.html), but other standard libraries have similar implementations):
 
 ```cpp
 template<typename _Tp>
@@ -61,11 +61,11 @@ move(_Tp&& __t) noexcept
 
 If you're looking at this and thinking "that's just a cast!", you're absolutely right. That's all it is. `std::move` takes whatever you pass to it, strips off any reference qualifiers (the `std::remove_reference` part), adds `&&` to make it an rvalue reference, and then performs a `static_cast` to that type, That's the entire function.
 
-Let me put this in simpler terms: `std::move` is like putting a sign on your object "I'm done with this, you can take its stuff." The acctual taking of the stuff happens later, when some other code sees that sign. **Specifically, that 'sign' (the rvalue reference type) tells the compiler to select the Move Constructor instead of the Copy Constructor**.
+Let me put this in simpler terms: `std::move` is like putting a sign on your object "I'm done with this, you can take its stuff." The actual taking of the stuff happens later, when some other code sees that sign. **Specifically, that 'sign' (the rvalue reference type) tells the compiler to select the Move Constructor instead of the Copy Constructor**.
 
 ### Understanding Value Categories: The Foundation Everything Builds On
 
-Now, to really understand why `std::move` behaves this way, we need to dive into the concept of Value Categories in C++. thsi is the way to understanding not just `std::move`, but move semantics in general.
+Now, to really understand why `std::move` behaves this way, we need to dive into the concept of Value Categories in C++. this is the way to understanding not just `std::move`, but move semantics in general.
 
 In modern C++, every expression has a Value Category, which determines how that expression can be used. Think of these categories as answering two questions about an expression:
 
@@ -133,7 +133,7 @@ std::string createString() {
 }
 ```
 
-You might think:"Hey, I'm returning a local variable, so I should use `std::move` to avoid a copy!" But actually, you're making things worse. Let me explain why.
+You might think: "Hey, I'm returning a local variable, so I should use `std::move` to avoid a copy!" But actually, you're making things worse. Let me explain why.
 
 Modern C++ compilers have an optimization called NRVO (Named Return Value Optimization). Here's how it works: when you return a local variable, the compiler is allowed to construct that variable directly into the memory location where the caller expects the return value to be. This means no copy or move is needed at all. The object is constructed in place. In other words, instead of:
 
@@ -149,9 +149,9 @@ This eliminates both the move *and* the destruction of the local object. It's be
 
 But here's the catch: NRVO has rules. For the optimization to work, the return statement must return a variable by name. When you write `return std::move(result);`, you're no longer returning `result` by name. Instead, you're returning an xvalue created by `std::move`.
 
-SO the compiler says "Well, I can't do NRVO because this isn't just a name beig returned." Now you're stuck with a move operation. You've traded a zero-cost operation (NRVO) for one operation (move). This is called pessimization (the opposite of an optimization).
+SO the compiler says, "Well, I can't do NRVO because this isn't just a name being returned." Now you're stuck with a move operation. You've traded a zero-cost operation (NRVO) for one operation (move). This is called pessimization (the opposite of an optimization).
 
-"But wait" you might say, "isn't a move cheap?" Yes, moving is usually cheaper than copying. But zero operations are cheaper than one operation. And for types where moving isn't trivial (maybe your string has a small string optimization, or other complexities), you might be forcing extra work that the compiler could have avoided entirely.
+"But wait," you might say, "isn't a move cheap?" Yes, moving is usually cheaper than copying. But zero operations are cheaper than one operation. And for types where moving isn't trivial (maybe your string has a small string optimization or other complexities), you might be forcing extra work that the compiler could have avoided entirely.
 
 The fix is simple: just return the variable by name:
 
@@ -202,7 +202,7 @@ consume(std::move(data));
 // This calls the COPY constructor
 ```
 
-This one of the most dangerous bugs because there's no warning or error. Your code compiles and runs, but it's not doing what you think it is.
+This is one of the most dangerous bugs because there's no warning or error. Your code compiles and runs, but it's not doing what you think it is.
 
 > **The rule**: Never use `std::move` on const objects. If something is const, you can't move from it by definition. Moving requires modifying the source object, and const means "cannot modify."
 
@@ -239,7 +239,7 @@ Here's what you should not do:
 - Call methods with preconditions (`name[0]` or `name.back()` assume the string isn't empty)
 - Make any assumptions about its state
 
-In practice, most standard library implementations do leave moved-from objects in a predictable state (strings are usually empty, vectors are usually empty), but this is not guaranteed. Code that relies on this is non-portable and technically undefined behavior.
+In practice, most standard library implementations do leave moved from objects in a predictable state (strings are usually empty, vectors are usually empty), but this is not guaranteed. Code that relies on this is non-portable and technically undefined behavior.
 
 The mental model I use: treat a moved-from object as if you'd just destroyed it. It's still technically alive (so you can assign to it), but its value is gone. It's like a person who's been mind-wiped, still physically there, but everything that made them "them" is gone.
 
@@ -249,7 +249,7 @@ The mental model I use: treat a moved-from object as if you'd just destroyed it.
 
 ## Implementing Move Semantics Correctly
 
-Now that we've covered what to not do, let's talk about doing it right. If you're implementing a class that manages resources  (memory, file handles, network connections, etc.), you need to implement move semantics. And there's a well-established pattern for doing this correctly.
+Now that we've covered what to not do, let's talk about doing it right. If you're implementing a class that manages resources (memory, file handles, network connections, etc.), you need to implement move semantics. And there's a well-established pattern for doing this correctly.
 
 ### The Rule of Five
 
@@ -294,11 +294,8 @@ public:
         if (this != &other) {  // Protect against self-assignment
             // Allocate into a TEMPORARY pointer first.
             int* new_data = new int[other.size];
-            
             std::copy(other.data, other.data + other.size, new_data);
-            
             delete[] data;
-            
             // Update the state
             data = new_data;
             size = other.size;
@@ -326,7 +323,7 @@ public:
 };
 ```
 
-Let me walk through each of these, because each one servers a specific purpose:
+Let me walk through each of these, because each one serves a specific purpose:
 
 **The Constructor and Destructor** are straightforward: the constructor allocates resources, the destructor frees them. This is basic RAII (Resource Acquisition Is Initialization), the resource's lifetime is tied to the object's lifetime.
 
@@ -402,7 +399,7 @@ When `std::vector` grows, it needs to maintain the strong exception guarantee. T
 
 - Create new memory block
 - Copy element 1 to new memory (might throw)
-- If it throws, delete new memory, original vector is untouched
+- If it throws, delete new memory, the original vector is untouched
 - Copy element 2 to new memory (might throw)
 - If it throws, destroy element 1 in new memory, delete new memory, original is untouched
 - Continue...
@@ -486,7 +483,7 @@ std::string create() {
 }
 ```
 
-The object is constructed directly in the caller's memory. Always. This isn't an optimization that might happen, it's required by the standard.
+The object is constructed directly in the caller's memory. Always. This isn't an optimization that might happen; it's required by the standard.
 
 This is different from NRVO (Named Return Value Optimization), which is still optional. When you return a local variable with a name:
 
@@ -550,7 +547,7 @@ Consider what happens today when a `std::vector<std::string>` needs to grow (rea
 1. For each string, call the move constructor (copies the pointer, nulls the old pointer)
 2. For each string in the old memory, call the destructor (checks if pointer is null, does nothing)
 
-That's lot of function calls. But conceptually, we could just:
+That's a lot of function calls. But conceptually, we could just:
 
 1. `memcpy` the entire block of strings to new memory
 2. Forget about the old memory (no destructors needed, they're all null anyway)
@@ -576,28 +573,28 @@ Let's look at some concrete numbers to understand the performance implications. 
 
 Moving vs. Copying a vector of 10,000 heavy objects.
 
-| Operation | Time | Speedup | Notes |
-|:----------|:-----|:--------|:------|
-| Deep Copy | 7.82 ms | 1x | Baseline. Allocates and copies memory. |
-| Move (Correct) | 1.08 ms | ~7x | Instant pointer swap. |
-| Move from const | 7.50 ms | 1x | The Trap. Silently falls back to Deep Copy. |
+| Operation       | Time    | Speedup | Notes                                       |
+|:----------------|:--------|:--------|:--------------------------------------------|
+| Deep Copy       | 7.82 ms | 1x      | Baseline. Allocates and copies memory.      |
+| Move (Correct)  | 1.08 ms | ~7x     | Instant pointer swap.                       |
+| Move from const | 7.50 ms | 1x      | The Trap. Silently falls back to Deep Copy. |
 
 ### Test 2: The Return Value Myth
 
 A common "optimization" is wrapping return values in std::move. Does it help?
 
-| Operation | Time (Best Run) | Result |
-|:----------|:----------------|:-------|
-| `return x;` (NRVO) | 0.83 ms | Fastest (Zero-copy construction) |
-| `return std::move(x);` | 0.82 ms | Equivalent (within margin of error) |
+| Operation              | Time (Best Run) | Result                              |
+|:-----------------------|:----------------|:------------------------------------|
+| `return x;` (NRVO)     | 0.83 ms         | Fastest (Zero-copy construction)    |
+| `return std::move(x);` | 0.82 ms         | Equivalent (within margin of error) |
 
 **They are identical.**
 
 ### Test 3: The Cost of Reallocation
 
-| Type Implementation | Time | Penalty |
-|:--------------------|:-----|:--------|
-| HeavyObject (with `noexcept`) | 1.63 ms | Baseline |
+| Type Implementation            | Time     | Penalty    |
+|:-------------------------------|:---------|:-----------|
+| HeavyObject (with `noexcept`)  | 1.63 ms  | Baseline   |
 | BadObject (missing `noexcept`) | 16.42 ms | 10x Slower |
 
 **The result is a 10x slowdown.**
@@ -833,7 +830,7 @@ When we write `DynamicArray<std::string> array2 = array1`, we explicitly want a 
 Move constructor (transferred 2 elements)
 ```
 
-Here's where it gets interesting. `std::move(array1)` converts array1 to an xvalue. The move constructor sees this and instead of allocating new memory and copying, it just:
+Here's where it gets interesting. `std::move(array1)` converts array1 to an xvalue. The move constructor sees this, and instead of allocating new memory and copying, it just:
 
 - Takes array1's data pointer
 - Takes array1's size and capacity
@@ -881,7 +878,7 @@ In that case, C++ guarantees the next best thing: **Automatic Move**. The compil
 
 - Compiler explorer link for the example: [https://godbolt.org/z/j4fbxEcWs](https://godbolt.org/z/j4fbxEcWs)
 
-- Code source of the exemple in Github: [https://github.com/ttheghost/SimpleDynamicArray](https://github.com/ttheghost/SimpleDynamicArray)
+- Code source of the example in GitHub: [https://github.com/ttheghost/SimpleDynamicArray](https://github.com/ttheghost/SimpleDynamicArray)
 
 ### What This Example Teaches Us
 
@@ -905,7 +902,7 @@ Let's look at some subtle performance issues that can occur even when you think 
 
 ### Pitfall 1: Small String Optimization (SSO) Makes Moves Not Free
 
-Modern standard library implementations use Small String Optimization for `std::string`. Strings below a certain size (typically 15-23 characters) are stored directly in the string object, not on the heap.
+Modern standard library implementations use Small String Optimization for `std::string`. Strings below a certain size (typically 15-23 characters) are stored directly in the string object, not in the heap.
 
 ```cpp
 std::string small = "Hi";         // Stored inline, no heap allocation
@@ -930,7 +927,7 @@ for (const auto& s : source) {  // const reference = can't move
 }
 ```
 
-The `const` here prevents moving. Even if you wanted to move from source, you can't because const references can't bind to rvalue references. The correct version:
+The `const` here prevents moving. Even if you want to move from source, you can't because const references can't bind to rvalue references. The correct version:
 
 ```cpp
 for (auto& s : source) {  // Non-const reference
