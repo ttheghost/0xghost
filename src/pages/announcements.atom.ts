@@ -29,7 +29,7 @@ export async function GET() {
   </author>
   ${sortedPosts.map(post => `
   <entry>
-    <title>New Post: ${escapeXml(post.data.title)}</title>
+    <title>${escapeXml(post.data.title)}</title>
     <link href="https://0xghost.dev/blog/${post.id}/"/>
     <id>https://0xghost.dev/blog/${post.id}/</id>
     <updated>${post.data.pubDate.toISOString()}</updated>
@@ -47,10 +47,15 @@ export async function GET() {
 }
 
 function escapeXml(unsafe: string): string {
-    return unsafe
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&apos;');
+    if (!unsafe) return '';
+    return unsafe.replace(/[<>&'"]|[\u0080-\uFFFF]/g, (c) => {
+        switch (c) {
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '&': return '&amp;';
+            case '\'': return '&apos;';
+            case '"': return '&quot;';
+            default: return `&#${c.charCodeAt(0)};`;
+        }
+    });
 }
