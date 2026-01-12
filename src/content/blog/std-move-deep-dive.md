@@ -17,7 +17,7 @@ struct HeavyObject {
     HeavyObject(HeavyObject&& other) : data(std::move(other.data)) {}
 
     HeavyObject(const HeavyObject& other) : data(other.data) {}
-    
+
     HeavyObject(const char* s) : data(s) {}
 };
 
